@@ -4,12 +4,15 @@ import 'dart:convert';
 
 void main() async {
   final socket = HomeAssistantSocket(
-      host: "YOUR-HOMEASSISTANT-URL", port: 8123, accessToken: const String.fromEnvironment('HA_TOKEN'));
+    host: "homeassistant.koproductions.dev",
+    port: 443,
+    entities: ["input_boolean.dummy"],
+  );
 
   await socket.connect();
 
-  int timeId = socket.subscribe("input_boolean.dummy", (event) {
-    print(event);
+  socket.subscribe("input_boolean.dummy", (event) {
+    print("Received event: ${event.toJson()}");
   });
 
   stdin.echoMode = false;
@@ -20,7 +23,7 @@ void main() async {
       socket.disconnect();
       exit(0);
     } else if (input == 'c') {
-      socket.unsubscribe(timeId);
+      socket.unsubscribe("input_boolean.dummy");
     }
   });
 }

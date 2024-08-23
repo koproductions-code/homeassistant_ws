@@ -3,4 +3,5 @@
 /// More dartdocs go here.
 library;
 
-export 'src/homeassistant_ws_socket.dart';
+export 'src/socket.dart';
+export 'src/response.dart';

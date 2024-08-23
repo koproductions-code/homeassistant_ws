@@ -5,18 +5,26 @@ import 'homeassistant_provider.dart';
 class HomeAssistantBuilder extends StatelessWidget {
   final String host;
   final int port;
+  final List<String> entities;
+
   final String? accessToken;
 
   final Widget? loadingWidget;
   final Widget child;
 
   HomeAssistantBuilder(
-      {super.key, required this.host, required this.port, this.accessToken, this.loadingWidget, required this.child});
+      {super.key,
+      required this.host,
+      required this.port,
+      required this.entities,
+      this.accessToken,
+      this.loadingWidget,
+      required this.child});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HomeAssistantProvider>(
-      create: (context) => HomeAssistantProvider(host: host, port: port, accessToken: accessToken),
+      create: (context) => HomeAssistantProvider(host: host, port: port, entities: entities, accessToken: accessToken),
       child: Builder(
         builder: (context) => FutureBuilder(
           future: Provider.of<HomeAssistantProvider>(context, listen: false).connect(),

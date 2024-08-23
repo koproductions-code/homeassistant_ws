@@ -69,7 +69,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///Users/koproductions/Programming/flutter/packages/flutter",
+      "rootUri": "file:///Users/koproductions/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -114,6 +114,12 @@
       "rootUri": "file:///Users/koproductions/.pub-cache/hosted/pub.dev/lints-3.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "logger",
+      "rootUri": "file:///Users/koproductions/.pub-cache/hosted/pub.dev/logger-2.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "logging",
@@ -213,7 +219,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///Users/koproductions/Programming/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/koproductions/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -332,10 +338,10 @@
       "languageVersion": "3.4"
     }
   ],
-  "generated": "2024-07-23T12:13:59.120669Z",
+  "generated": "2024-08-01T09:53:55.505205Z",
   "generator": "pub",
   "generatorVersion": "3.4.3",
-  "flutterRoot": "file:///Users/koproductions/Programming/flutter",
+  "flutterRoot": "file:///Users/koproductions/flutter",
   "flutterVersion": "3.22.2",
   "pubCache": "file:///Users/koproductions/.pub-cache"
 }

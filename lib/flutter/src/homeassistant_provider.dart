@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 class HomeAssistantProvider with ChangeNotifier {
   HomeAssistantSocket? socket;
 
-  HomeAssistantProvider({required String host, required int port, String? accessToken}) {
-    var token = String.fromEnvironment('HA_TOKEN', defaultValue: accessToken ?? "");
-    if (token.isEmpty || token == "") {
-      throw Exception("HA_TOKEN must be set as an environment variable or passed as an argument.");
+  HomeAssistantProvider(
+      {required String host, required int port, required List<String> entities, String? accessToken}) {
+    if (accessToken != null) {
+      socket = HomeAssistantSocket(host: host, port: port, entities: entities, accessToken: accessToken);
+    } else {
+      socket = HomeAssistantSocket(host: host, port: port, entities: entities);
     }
-    socket = HomeAssistantSocket(host: host, port: port, accessToken: token);
   }
 
   Future<void> connect() async {

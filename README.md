@@ -11,26 +11,85 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+# homeassistant_ws
+This package provides an interface to communicate with HomeAssistant using the websocket protocol. In addition, it provides a way to integrate this interface into flutter applications using [provider](https://pub.dev/packages/provider)
 
 ## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+ - Listen for state changes for specific HomeAssistant entities.
+ - Integrate into flutter widgets using the provider package.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+### Dependencies:
+```dart
+provider: ^6.1.2
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
+### Usage with Flutter
 ```dart
-const like = 'sample';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:homeassistant_ws/flutter/homeassistant_ws_flutter.dart'; // <-- If you want to use the flutter functionality, you need to import this subpackage.
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: HomeAssistantBuilder(
+            host: "homeassistant.koproductions.dev",
+            port: 443,
+            entities: ["[Your Entity IDs]"],
+            child: EntityWidget(
+              entityId: "[EntityID]",
+            )));
+  }
+}
+
+class EntityWidget extends StatefulWidget {
+  final String entityId;
+
+  const EntityWidget({super.key, required this.entityId});
+
+  @override
+  EntityWidgetState createState() => EntityWidgetState();
+}
+
+class EntityWidgetState extends State<EntityWidget> {
+  String state = "unknown";
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final provider = Provider.of<HomeAssistantProvider>(context);
+
+    provider.socket?.subscribe(widget.entityId, update);
+  }
+
+  void update(HAEntityState data) {
+    setState(() {
+      state = data.state;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(state);
+  }
+}
+
 ```
+
+## Credits
+Thanks to 
 
 ## Additional information
 

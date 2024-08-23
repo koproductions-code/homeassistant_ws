@@ -27,3 +27,4 @@ doc/api/
 .flutter-plugins-dependencies
 
 examples/flutter_example/
+.dart_tool/package_config.json
