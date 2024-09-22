@@ -14,7 +14,7 @@ class HomeAssistantSocket {
   final List<String> entities;
 
   int _subscriptionCounter = 0;
-  final Map<String, int> _callbackMap = {};
+  final Map<String, List<int>> _callbackMap = {};
   final Map<int, Function(HAEntityState)> _subscriptions = {};
 
   HomeAssistantSocket({
@@ -57,7 +57,9 @@ class HomeAssistantSocket {
       case 'event':
         var eventResponse = response as HAEventResponse;
         if (_callbackMap.containsKey(eventResponse.entityId)) {
-          _subscriptions[_callbackMap[eventResponse.entityId]!]?.call(eventResponse.state);
+          for (var id in _callbackMap[eventResponse.entityId]!) {
+            _subscriptions[id]?.call(eventResponse.state);
+          }
         }
         break;
       case 'result':
@@ -68,7 +70,11 @@ class HomeAssistantSocket {
             entityStates.retainWhere((HAEntityState state) => entities.contains(state.entityId));
 
             for (var state in entityStates) {
-              _subscriptions[_callbackMap[state.entityId]!]?.call(state);
+              if (_callbackMap.containsKey(state.entityId)) {
+                for (var id in _callbackMap[state.entityId]!) {
+                  _subscriptions[id]?.call(state);
+                }
+              }
             }
           }
         } else {
@@ -91,7 +97,11 @@ class HomeAssistantSocket {
 
     int newId = ++_subscriptionCounter;
     _subscriptions[newId] = onResponse;
-    _callbackMap[entity] = newId;
+
+    if (!_callbackMap.containsKey(entity)) {
+      _callbackMap[entity] = [];
+    }
+    _callbackMap[entity]!.add(newId);
 
     return newId;
   }
@@ -101,8 +111,10 @@ class HomeAssistantSocket {
       throw Exception("No subscription found for entity: $entity");
     }
 
-    int id = _callbackMap[entity]!;
-    _subscriptions.remove(id);
+    List<int> ids = _callbackMap[entity]!;
+    for (var id in ids) {
+      _subscriptions.remove(id);
+    }
     _callbackMap.remove(entity);
   }
 }

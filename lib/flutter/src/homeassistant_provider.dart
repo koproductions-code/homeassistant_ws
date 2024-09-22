@@ -14,7 +14,6 @@ class HomeAssistantProvider with ChangeNotifier {
   }
 
   Future<void> connect() async {
-    await socket?.disconnect();
     await socket!.connect();
     notifyListeners();
   }
