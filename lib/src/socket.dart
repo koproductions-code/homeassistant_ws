@@ -6,6 +6,7 @@ import 'types.dart';
 import 'request.dart';
 
 import 'dart:async';
+import 'dart:developer';
 
 class HomeAssistantSocket {
   final String host;
@@ -35,8 +36,8 @@ class HomeAssistantSocket {
       await HAWebSocketService().connect(host, port, accessToken);
 
       HAWebSocketService().messages.listen(onReceive);
-      startEventStream();
       fetchInitialStates();
+      startEventStream();
     } catch (e) {
       rethrow;
     }
@@ -65,10 +66,10 @@ class HomeAssistantSocket {
       case 'result':
         var resultResponse = response as HAResultResponse;
         if (resultResponse.success) {
-          if (resultResponse.result.runtimeType == List<HAEntityState>) {
+	  print(resultResponse.result.runtimeType);
+          if (resultResponse.id == 1) {
             var entityStates = resultResponse.result as List<HAEntityState>;
             entityStates.retainWhere((HAEntityState state) => entities.contains(state.entityId));
-
             for (var state in entityStates) {
               if (_callbackMap.containsKey(state.entityId)) {
                 for (var id in _callbackMap[state.entityId]!) {
